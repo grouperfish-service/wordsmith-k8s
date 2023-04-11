@@ -1,17 +1,11 @@
-# Wordsmith API
+# Wordsmith Kubernetes Manifests (Kustomize)
 
-Wordsmith will display a random set of words every time you refresh the page. It builds the word list from an API that serves words from a database.
+Wordsmith is the demo project originally from [dockersamples/wordsmith](https://github.com/dockersamples/wordsmith)
 
-The demo runs across three apps:
+## Kubernetes Kustomize Manifests
 
-- **web** - a Go web application that calls the API and builds words into sentences
-- **api** - a Java REST API which serves words read from the database
-- **db** - a Postgres database that stores words
+The pods/containers of this app are in the `./base` directory and those files rarely change. They are plain Kubernetes manifests.
 
-## Architecture
+For each environment, we create a directory in `./environments` and add a `kustomization.yaml` file, which is a [Kustomize](https://kustomize.io/) manifest that pulls in the base manifests and overrides environment-specific values.
 
-![Architecture diagram](https://raw.githubusercontent.com/dockersamples/wordsmith/main/architecture.excalidraw.png)
-
-## Original source repository
-
-[BretFisher/wordsmith](https://github.com/BretFisher/wordsmith)
+These environment overrides can be consumed by Argo CD, Flux, or applied by kubectl directly with `kubectl apply -k environments/<env>`. 
